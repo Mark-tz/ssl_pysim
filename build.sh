@@ -1,0 +1,1 @@
+pyinstaller sim.py --hidden-import='PIL._tkinter_finder' --onefile --noconfirm --exclude-module strategy
