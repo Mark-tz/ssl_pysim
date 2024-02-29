@@ -171,6 +171,13 @@ if __name__ == '__main__':
     print("Results : ")
     for r in results:
         print("Time: {:.2f}, Done: {}".format(r[0],r[1]))
+    
+    import gzip, struct
+    with gzip.open(os.path.join(app_path,"results-{}-{}.gz".format(config["seed"],config['ID'])), "wb") as f:
+        f.write(b"PYSSL_RESULT")
+        f.write(struct.pack('>QsI',config["seed"],str(config['ID']).encode(),len(results)))
+        for r in results:
+            f.write(struct.pack('>fi',r[0],r[1]))
     # for i in range(100):
     #     sim.decision(S.DECISION_TREE)
     #     vis.update(ax,*sim.step(dt))

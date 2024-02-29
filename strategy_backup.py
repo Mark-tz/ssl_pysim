@@ -1,6 +1,7 @@
 CONFIG = {
+    "ID" : "markmark",
     "seed" : 0,
-    "speed_up" : 1,
+    "speed_up" : 10,
 }
 # judgement condition : 
 # - have_targets
@@ -33,42 +34,42 @@ DECISION_TREE = [
             }
         ],
     },
-    # {
-    #     "ID" : "X_LARGER_THAN",
-    #     "Type" : "Judgement",
-    #     "Arguments" : ["x_larger_than", 0.0],
-    #     "Children" : [
-    #         {
-    #             "ID" : "Y_LARGER_THAN",
-    #             "Type" : "Judgement",
-    #             "Arguments" : ["y_larger_than", 0.0],
-    #             "Children" : [
-    #                 {
-    #                     "ID" : "TO_POINT_1",
-    #                     "Type" : "Action",
-    #                     "Arguments" : ["to_point", IMPORTANT_D, -0.01],
-    #                 },
-    #             ],
-    #         },{
-    #             "ID" : "TO_POINT_2",
-    #             "Type" : "Action",
-    #             "Arguments" : ["to_point", -0.01, -IMPORTANT_D],
-    #         }
-    #     ],
-    # },{
-    #     "ID" : "Y_LARGER_THAN",
-    #     "Type" : "Judgement",
-    #     "Arguments" : ["y_larger_than", 0.0],
-    #     "Children" : [
-    #         {
-    #             "ID" : "TO_POINT_3",
-    #             "Type" : "Action",
-    #             "Arguments" : ["to_point", 0.01, IMPORTANT_D],
-    #         },
-    #     ],
-    # },{
-    #     "ID" : "TO_POINT_4",
-    #     "Type" : "Action",
-    #     "Arguments" : ["to_point", -IMPORTANT_D, 0.01],
-    # },
+    {
+        "ID" : "X_LARGER_THAN",
+        "Type" : "Judgement",
+        "Arguments" : ["x_larger_than", 0.0],
+        "Children" : [
+            {
+                "ID" : "Y_LARGER_THAN",
+                "Type" : "Judgement",
+                "Arguments" : ["y_larger_than", 0.0],
+                "Children" : [
+                    {
+                        "ID" : "TO_POINT_1",
+                        "Type" : "Action",
+                        "Arguments" : ["to_point", IMPORTANT_D, -0.01],
+                    },
+                ],
+            },{
+                "ID" : "TO_POINT_2",
+                "Type" : "Action",
+                "Arguments" : ["to_point", -0.01, -IMPORTANT_D],
+            }
+        ],
+    },{
+        "ID" : "Y_LARGER_THAN",
+        "Type" : "Judgement",
+        "Arguments" : ["y_larger_than", 0.0],
+        "Children" : [
+            {
+                "ID" : "TO_POINT_3",
+                "Type" : "Action",
+                "Arguments" : ["to_point", 0.01, IMPORTANT_D],
+            },
+        ],
+    },{
+        "ID" : "TO_POINT_4",
+        "Type" : "Action",
+        "Arguments" : ["to_point", -IMPORTANT_D, 0.01],
+    },
 ]

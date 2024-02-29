@@ -3,3 +3,4 @@ sim
 sim.spec
 build
 dist
+results-*
