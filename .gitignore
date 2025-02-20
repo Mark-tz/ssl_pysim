@@ -4,3 +4,4 @@ sim.spec
 build
 dist
 results-*
+*.zip
