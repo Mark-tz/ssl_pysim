@@ -296,8 +296,8 @@ if __name__ == "__main__":
             TIMEOUT += 1
     print("-----------------------------\nSimulation finished!")
     print(f"Arrived: {ARRIVED}/{TRY_TIMES}, Collision: {COLLISION}/{TRY_TIMES}, Overtime: {TIMEOUT}/{TRY_TIMES}")
-    print(f"Average Arrived times: {np.sum(ARRIVED_TIMES)/ARRIVED}")
-    print(f"Average Collision times: {np.sum(COLLISION_TIMES)/COLLISION}")
+    print(f"Average Arrived times: {np.sum(ARRIVED_TIMES)/ARRIVED if ARRIVED > 0 else 0}")
+    print(f"Average Collision times: {np.sum(COLLISION_TIMES)/COLLISION if COLLISION > 0 else 0}")
 
     # write result to `res2025.gzip`
     import gzip
