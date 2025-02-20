@@ -303,11 +303,12 @@ if __name__ == "__main__":
     import gzip
     import pickle
     with gzip.open("res2025.gzip", "wb") as f:
-        pickle.dump((ARRIVED, COLLISION, TIMEOUT, ARRIVED_TIMES, COLLISION_TIMES), f)
+        pickle.dump((ARRIVED, COLLISION, TIMEOUT, ARRIVED_TIMES, COLLISION_TIMES, SEED), f)
 
-    # test read
+    # # test read
     # with gzip.open("res2025.gzip", "rb") as f:
-    #     ARRIVED, COLLISION, OVERTIME, ARRIVED_TIMES, COLLISION_TIMES = pickle.load(f)
+    #     ARRIVED, COLLISION, OVERTIME, ARRIVED_TIMES, COLLISION_TIMES, SEED = pickle.load(f)
     # print(f"Arrived: {ARRIVED}/{TRY_TIMES}, Collision: {COLLISION}/{TRY_TIMES}, Overtime: {TIMEOUT}/{TRY_TIMES}")
     # print(f"Average Arrived times: {np.sum(ARRIVED_TIMES)/ARRIVED}")
     # print(f"Average Collision times: {np.sum(COLLISION_TIMES)/COLLISION}")
+    # print(f"SEED: {SEED}")

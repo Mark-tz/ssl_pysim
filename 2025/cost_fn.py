@@ -1,7 +1,7 @@
 import numpy as np
 
 SEED = None
-SIM_PAUSE_TIME = 0.1
+SIM_PAUSE_TIME = 0.01
 
 def cost_fn(vel_x, vel_w, obstacle_min_dist, goal_dist):
     """
