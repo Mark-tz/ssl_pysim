@@ -11,4 +11,4 @@ def cost_fn(vel_x, vel_w, obstacle_min_dist, goal_dist):
         obstacle_min_dist: 障碍物最小距离
         goal_dist: 到目标的距离
     """
-    return goal_dist
+    return 10*1.0 / np.clip(obstacle_min_dist, 0.5, 0.6) + goal_dist

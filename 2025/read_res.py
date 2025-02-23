@@ -6,8 +6,8 @@ def read_file(file_name):
         ARRIVED, COLLISION, TIMEOUT, ARRIVED_TIMES, COLLISION_TIMES, SEED = pickle.load(f)
     TRY_TIMES = ARRIVED + COLLISION + TIMEOUT
     print(f"Arrived: {ARRIVED}/{TRY_TIMES}, Collision: {COLLISION}/{TRY_TIMES}, Overtime: {TIMEOUT}/{TRY_TIMES}")
-    print(f"Average Arrived times: {np.sum(ARRIVED_TIMES)/ARRIVED}")
-    print(f"Average Collision times: {np.sum(COLLISION_TIMES)/COLLISION}")
+    print(f"Average Arrived times: {np.sum(ARRIVED_TIMES)/ARRIVED if ARRIVED != 0 else 0}")
+    print(f"Average Collision times: {np.sum(COLLISION_TIMES)/COLLISION if COLLISION != 0 else 0}")
     return (ARRIVED, COLLISION, TIMEOUT, np.sum(ARRIVED_TIMES)/ARRIVED, np.sum(COLLISION_TIMES)/COLLISION, SEED)
 
 if __name__ == "__main__":

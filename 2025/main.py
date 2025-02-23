@@ -29,7 +29,7 @@ class RobotModel:
         self.y += self.vx * np.sin(self.theta) * dt
 
 class ObstacleGenerator:
-    def __init__(self, world_size=(10, 10), min_obstacles=10, max_obstacles=20, radius=0.5):
+    def __init__(self, world_size=(10, 10), min_obstacles=20, max_obstacles=30, radius=0.5):
         self.world_size = world_size
         self.min_obstacles = min_obstacles
         self.max_obstacles = max_obstacles

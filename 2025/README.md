@@ -62,14 +62,13 @@ cost = np.abs(goal_dist) * 0.5 - np.abs(obstacle_min_dist)
 
 ## 测试方法
 
-1. 运行`main.py`文件，观察机器人行为：
-   ```bash
-   python main.py
-   ```
+1. 双击运行`main.exe`文件，观察机器人行为：
 2. 仿真窗口会显示：
    - 左侧：机器人运动轨迹和障碍物
    - 中间：不同速度组合的代价分布
    - 右侧：机器人速度随时间变化曲线
+
+   ![GUI](2025.png)
 
 
 ## 常用函数参考
