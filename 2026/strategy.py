@@ -1,19 +1,19 @@
 # ======================================================================
-# 2026 机器人专业转专业考核 —— 分布式协作任务分配
-# 学生作答文件
+# 2026 Robotics Assessment -- Distributed Cooperative Task Allocation
+# Student answer file
 # ======================================================================
 
 # ★★★ 请将下方学号改为你的真实学号，否则无法生成有效结果文件 ★★★
-STUDENT_ID = "3250101234"   # 例如: "3250101234"
+STUDENT_ID = "Fill in your student ID"   # e.g. "3250101234"
 
-# SEED: 正式测试时由现场公布，请将公布的数字填写在此处
-# 调试阶段可设为任意整数（例如 42、100），或保持 None（每次随机地图）
+# SEED: enter the number announced at the exam venue for the official test.
+# During practice you can set any integer (e.g. 42, 100) or keep None (random map each run).
 SEED = None
 
-# 仿真动画速度控制：
-#   0.01  → 快速运行（推荐调试阶段使用）
-#   0.05  → 中速，方便观察细节
-#   -1    → 手动单步模式（按空格键进入下一帧）
+# Animation speed:
+#   0.01  -> fast (recommended for debugging)
+#   0.05  -> medium, easier to observe details
+#   -1    -> manual step mode (press Space to advance one frame)
 SIM_PAUSE_TIME = 0.01
 
 # 考试模式（极速模式）：
@@ -27,40 +27,47 @@ import numpy as np
 
 def choose_task(my_pos, my_id, partner_pos, partner_target, tasks):
     """
-    任务选择函数 —— 你需要在此实现你的协作策略。
+    Task selection function -- implement your cooperative strategy here.
 
-    每当机器人完成一个任务、或启动时尚无目标，此函数便被调用一次，
-    你需要返回一个整数，表示你希望前往的任务点编号。
+    This function is called once whenever a robot finishes a task or has
+    no current target at startup.  Return the index of the task you want
+    to head towards.
 
-    ── 参数说明 ──────────────────────────────────────────────────────────
-    my_pos         : tuple (x, y)  —— 我的当前坐标（单位：米）
-    my_id          : int (0 或 1)  —— 我的机器人编号（A=0，B=1）
-    partner_pos    : tuple (x, y)  —— 队友的当前坐标
-    partner_target : int           —— 队友正在前往的任务点编号
-                                      （-1 表示队友此时暂无目标）
-    tasks          : list[(x, y)]  —— 当前所有未完成任务点的坐标列表
+    Parameters
+    ----------
+    my_pos         : tuple (x, y)  -- my current position (metres)
+    my_id          : int (0 or 1)  -- my robot ID  (A=0, B=1)
+    partner_pos    : tuple (x, y)  -- partner's current position
+    partner_target : int           -- index of the task the partner is
+                                      heading to (-1 = partner has no target)
+    tasks          : list[(x, y)]  -- positions of all incomplete tasks
 
-    ── 返回值 ────────────────────────────────────────────────────────────
-    int —— 你希望前往的任务点编号（即 tasks 中的下标，范围 0 ~ len(tasks)-1）
+    Returns
+    -------
+    int -- index into tasks of the task you want to complete
+           (valid range: 0 .. len(tasks)-1)
 
-    ── 注意事项 ──────────────────────────────────────────────────────────
-    · 如果两个机器人同时选择了同一个任务点，只有先到达的机器人得分，
-      另一个机器人白跑一趟，然后重新选择下一个目标
-    · tasks 列表会动态变化：任务被完成后消失，场地中会适时补充新任务
-    · 两个机器人使用同一套函数，只是 my_id 不同
-    · partner_target 是队友"上一个决策时刻"的目标，存在轻微的信息延迟
-    · 可以使用 numpy 函数：np.hypot, np.argmin, np.array, np.where 等
+    Notes
+    -----
+    * If both robots choose the same task, only the first to arrive scores;
+      the other re-selects on the next call.
+    * The tasks list changes dynamically: completed tasks are removed and
+      new ones are added over time.
+    * Both robots use the same function; they are distinguished by my_id.
+    * partner_target reflects the partner's decision from the *previous*
+      time step (slight information delay -- fully distributed).
+    * Useful numpy helpers: np.hypot, np.argmin, np.array, np.where, etc.
     """
     if not tasks:
         return -1
 
-    # ──────────────────────────────────────────────────────────────────
-    # 在此处编写你的策略（替换下方默认实现）
-    # ──────────────────────────────────────────────────────────────────
+    # ----------------------------------------------------------------
+    # Write your strategy here (replace the default implementation below)
+    # ----------------------------------------------------------------
 
-    # 默认策略：选择距离我最近的任务点（最简单的贪心，不考虑队友）
+    # Default strategy: go to the nearest task (greedy, ignores partner)
     my_pos = np.array(my_pos)
     dists = [np.hypot(my_pos[0] - t[0], my_pos[1] - t[1]) for t in tasks]
     return int(np.argmin(dists))
 
-    # ──────────────────────────────────────────────────────────────────
+    # ----------------------------------------------------------------
