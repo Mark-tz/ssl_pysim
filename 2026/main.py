@@ -35,7 +35,7 @@ _HMAC_KEY = b"ssl_pysim_2026_distributed_coop_challenge"
 
 # 可视化颜色
 _COLORS = ['#1565C0', '#C62828']   # 机器人A：蓝  机器人B：红
-_LABELS = ['机器人 A', '机器人 B']
+_LABELS = ['Robot A', 'Robot B']
 
 _W = 56   # 终端输出宽度
 
@@ -371,7 +371,7 @@ class Visualizer:
                     color=c, fill=False, lw=1.5,
                     linestyle='--', alpha=0.6, zorder=4))
             ax.text(robot.x + 0.45, robot.y + 0.45,
-                    f'{_LABELS[robot.id]}\n完成: {robot.n_completed}',
+                    f'{_LABELS[robot.id]}\nDone: {robot.n_completed}',
                     fontsize=8, color=c, zorder=7)
 
         legend_elems = [
@@ -380,12 +380,12 @@ class Visualizer:
             Line2D([0],[0], marker='o', color='w',
                    markerfacecolor=_COLORS[1], markersize=10, label=_LABELS[1]),
             Line2D([0],[0], marker='o', color='w',
-                   markerfacecolor='#9E9E9E', markersize=8,  label='待完成任务'),
+                   markerfacecolor='#9E9E9E', markersize=8,  label='Pending Tasks'),
         ]
         ax.legend(handles=legend_elems, loc='upper left', fontsize=8)
         ax.set_xlabel(
-            f'已完成: {total_done}  |  剩余: {len(tasks)}'
-            f'  |  总生成: {task_mgr.total_spawned}',
+            f'Done: {total_done}  |  Remaining: {len(tasks)}'
+            f'  |  Spawned: {task_mgr.total_spawned}',
             fontsize=9)
 
         # ── 进度折线 ──────────────────────────────────────────────────
@@ -395,9 +395,9 @@ class Visualizer:
         ax2.clear()
         ax2.plot(self._ts, self._cs, color='#1565C0', linewidth=2)
         ax2.set_xlim(0, SIM_TIME)
-        ax2.set_xlabel('时间 (s)', fontsize=9)
-        ax2.set_ylabel('累计完成任务数', fontsize=9)
-        ax2.set_title(f'Run {run_idx+1} 完成进度', fontsize=10)
+        ax2.set_xlabel('Time (s)', fontsize=9)
+        ax2.set_ylabel('Cumulative Completed Tasks', fontsize=9)
+        ax2.set_title(f'Run {run_idx+1} Progress', fontsize=10)
         ax2.grid(True, alpha=0.3)
 
         # ── 文字信息面板 ──────────────────────────────────────────────
@@ -411,22 +411,22 @@ class Visualizer:
             prev_str = '  '.join(str(s) for s in run_scores_so_far)
 
         info = (
-            f"学号: {self.student_id}\n"
+            f"Student ID: {self.student_id}\n"
             f"SEED: {self.seed}\n"
             f"\n"
             f"Run {run_idx+1} / {N_RUNS}\n"
-            f"时间: {t:.1f} / {SIM_TIME:.0f} s\n"
+            f"Time: {t:.1f} / {SIM_TIME:.0f} s\n"
             f"\n"
-            f"机器人A 完成: {robots[0].n_completed}\n"
-            f"机器人B 完成: {robots[1].n_completed}\n"
-            f"合计完成:   {total_done}\n"
+            f"Robot A done: {robots[0].n_completed}\n"
+            f"Robot B done: {robots[1].n_completed}\n"
+            f"Total done:   {total_done}\n"
             f"\n"
-            f"剩余任务: {len(tasks)}\n"
-            f"总生成:   {task_mgr.total_spawned}\n"
+            f"Remaining tasks: {len(tasks)}\n"
+            f"Total spawned:   {task_mgr.total_spawned}\n"
         )
         if run_scores_so_far:
-            info += f"\n已完成轮得分:\n[{prev_str}]"
-        info += "\n\n[空格] 暂停 / 继续"
+            info += f"\nCompleted run scores:\n[{prev_str}]"
+        info += "\n\n[Space] Pause / Resume"
 
         ax3.text(0.08, 0.97, info,
                  transform=ax3.transAxes,
@@ -453,7 +453,7 @@ class Visualizer:
 # 单次仿真
 # ======================================================================
 def run_once(robots, task_mgr, choose_task_fn, visualizer,
-             run_idx, run_scores_so_far):
+             run_idx, run_scores_so_far, vis_stride=1):
     for robot in robots:
         robot.reset()
     task_mgr.reset()
@@ -522,7 +522,7 @@ def run_once(robots, task_mgr, choose_task_fn, visualizer,
         task_mgr.maybe_refresh()
 
         # 步骤8：可视化
-        if visualizer:
+        if visualizer and (step % vis_stride == 0 or step == int(SIM_TIME / DT) - 1):
             visualizer.update(robots, task_mgr, t, run_idx, run_scores_so_far)
 
     elapsed = time.time() - t0
@@ -571,6 +571,7 @@ if __name__ == '__main__':
     SEED          = mod.SEED
     SIM_PAUSE_TIME = mod.SIM_PAUSE_TIME
     choose_task   = mod.choose_task
+    exam_mode     = bool(getattr(mod, 'EXAM_MODE', False))
 
     # ── 随机种子初始化 ────────────────────────────────────────────────
     _seed = SEED if SEED is not None else random.randrange(10000)
@@ -587,7 +588,18 @@ if __name__ == '__main__':
     # ── 初始化仿真对象 ────────────────────────────────────────────────
     robots   = [Robot(*ROBOT_STARTS[0], 0), Robot(*ROBOT_STARTS[1], 1)]
     task_mgr = TaskManager()
-    vis      = Visualizer(SIM_PAUSE_TIME, STUDENT_ID, _seed)
+    vis      = None if exam_mode else Visualizer(SIM_PAUSE_TIME, STUDENT_ID, _seed)
+
+    if exam_mode:
+        vis_stride = 1
+    elif SIM_PAUSE_TIME < 0:
+        vis_stride = 1
+    elif SIM_PAUSE_TIME <= 0.01:
+        vis_stride = 5
+    elif SIM_PAUSE_TIME <= 0.02:
+        vis_stride = 3
+    else:
+        vis_stride = 1
 
     # ── 主循环 ────────────────────────────────────────────────────────
     run_scores  = []
@@ -596,13 +608,14 @@ if __name__ == '__main__':
     for run_idx in range(N_RUNS):
         score, a_done, b_done, elapsed = run_once(
             robots, task_mgr, choose_task, vis,
-            run_idx, run_scores
+            run_idx, run_scores, vis_stride
         )
         run_scores.append(score)
         run_details.append((score, a_done, b_done, elapsed))
         print_run_result(run_idx, score, a_done, b_done, elapsed)
 
-    vis.close()
+    if vis:
+        vis.close()
 
     # ── 保存结果 ──────────────────────────────────────────────────────
     fname = save_result(STUDENT_ID, _seed, run_scores)
