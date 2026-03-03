@@ -16,6 +16,8 @@ if exist dist      rmdir /s /q dist
 if exist main.spec del /q main.spec
 
 REM 打包
+REM   --exclude-module strategy   : 不将 strategy.py 打入包内
+REM   main.py 使用 importlib.util 在运行时按绝对路径加载外部 strategy.py
 pyinstaller main.py ^
     --onefile ^
     --nowindowed ^
@@ -23,7 +25,8 @@ pyinstaller main.py ^
     --name main ^
     --exclude-module strategy ^
     --hidden-import=PIL._tkinter_finder ^
-    --hidden-import=matplotlib.backends.backend_tkagg
+    --hidden-import=matplotlib.backends.backend_tkagg ^
+    --hidden-import=importlib.util
 
 echo.
 echo 打包完成！可执行文件位于 dist\main.exe
