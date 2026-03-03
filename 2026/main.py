@@ -369,14 +369,14 @@ class Visualizer:
                     f'{_LABELS[robot.id]}\nDone: {robot.n_completed}',
                     fontsize=8, color=c, zorder=7)
 
-        ax.legend(handles=[
+        legend_elems = [
             Line2D([0],[0], marker='o', color='w',
                    markerfacecolor=_COLORS[0], markersize=10, label=_LABELS[0]),
             Line2D([0],[0], marker='o', color='w',
                    markerfacecolor=_COLORS[1], markersize=10, label=_LABELS[1]),
             Line2D([0],[0], marker='o', color='w',
                    markerfacecolor='#9E9E9E', markersize=8,  label='Pending Tasks'),
-        ])
+        ]
         ax.legend(handles=legend_elems, loc='upper left', fontsize=8)
         ax.set_xlabel(
             f'Done: {total_done}  |  Remaining: {len(tasks)}'
