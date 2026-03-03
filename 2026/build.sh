@@ -1,23 +1,24 @@
 #!/bin/bash
 # ======================================================================
-# 2026 考核题目 —— 打包脚本（Linux / macOS）
-# 用途：将 main.py 打包为单文件可执行程序，同时排除 strategy.py
-#       使得学生可以在同目录下修改 strategy.py 而无需重新编译
-# 使用：chmod +x build.sh && ./build.sh
+# 2026 Robotics Assessment -- Build script (Linux / macOS)
+# Purpose: Package main.py into a single-file executable, while
+#          excluding strategy.py so students can edit it externally
+#          without recompiling the binary.
+# Usage:   chmod +x build.sh && ./build.sh
 # ======================================================================
 
 set -e
 
 echo "========================================"
-echo "  2026 考核题目打包 (Linux/macOS)"
+echo "  2026 Assessment Build (Linux/macOS)"
 echo "========================================"
 
-# 清理旧产物
+# Clean previous build artifacts
 rm -rf build dist __pycache__ main.spec
 
-# 打包
-# --exclude-module strategy : 不将 strategy.py 打入包内
-# main.py 使用 importlib.util 在运行时按绝对路径加载外部 strategy.py
+# Package
+# --exclude-module strategy : keep strategy.py out of the bundle
+# main.py loads strategy.py at runtime via importlib.util (absolute path)
 pyinstaller main.py \
     --onefile \
     --nowindowed \
@@ -29,9 +30,9 @@ pyinstaller main.py \
     --hidden-import=importlib.util
 
 echo ""
-echo "打包完成！可执行文件位于 dist/main"
+echo "Build complete!  Executable is at dist/main"
 echo ""
-echo "发布时，将以下文件放在同一目录下交给学生："
-echo "  dist/main      ← 可执行文件"
-echo "  strategy.py    ← 学生编辑文件"
-echo "  README.md      ← 题目说明"
+echo "Files to distribute to students (place them in the same directory):"
+echo "  dist/main      <- executable"
+echo "  strategy.py    <- student edit file"
+echo "  README.md      <- problem description"

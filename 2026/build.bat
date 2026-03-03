@@ -1,23 +1,24 @@
 @echo off
 REM ======================================================================
-REM 2026 考核题目 —— 打包脚本（Windows）
-REM 用途：将 main.py 打包为单文件可执行程序，同时排除 strategy.py
-REM       使得学生可以在同目录下修改 strategy.py 而无需重新编译
-REM 使用：双击运行 build.bat，或在 cmd 中执行
+REM 2026 Robotics Assessment -- Build script (Windows)
+REM Purpose: Package main.py into a single-file executable, while
+REM          excluding strategy.py so students can edit it externally
+REM          without recompiling the binary.
+REM Usage: Double-click build.bat, or run it in a cmd window.
 REM ======================================================================
 
 echo ========================================
-echo   2026 考核题目打包 (Windows)
+echo   2026 Assessment Build (Windows)
 echo ========================================
 
-REM 清理旧产物
+REM Clean previous build artifacts
 if exist build     rmdir /s /q build
 if exist dist      rmdir /s /q dist
 if exist main.spec del /q main.spec
 
-REM 打包
-REM   --exclude-module strategy   : 不将 strategy.py 打入包内
-REM   main.py 使用 importlib.util 在运行时按绝对路径加载外部 strategy.py
+REM Package
+REM   --exclude-module strategy   : keep strategy.py out of the bundle
+REM   main.py loads strategy.py at runtime via importlib.util (absolute path)
 pyinstaller main.py ^
     --onefile ^
     --nowindowed ^
@@ -29,11 +30,11 @@ pyinstaller main.py ^
     --hidden-import=importlib.util
 
 echo.
-echo 打包完成！可执行文件位于 dist\main.exe
+echo Build complete!  Executable is at dist\main.exe
 echo.
-echo 发布时，将以下文件放在同一目录下交给学生：
-echo   dist\main.exe   ^<^-- 可执行文件
-echo   strategy.py     ^<^-- 学生编辑文件
-echo   README.md       ^<^-- 题目说明
+echo Files to distribute to students (place them in the same directory):
+echo   dist\main.exe   ^<-- executable
+echo   strategy.py     ^<-- student edit file
+echo   README.md       ^<-- problem description
 echo.
 pause
